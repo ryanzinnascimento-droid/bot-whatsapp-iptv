@@ -19,8 +19,8 @@ const userState = {};
 // ─── FUNÇÃO: Enviar mensagem de texto ─────────────────────────
 async function sendText(telefone, messagem) {
   await axios.post(`${ZAPI_URL}/send-text`, {
-    phone,
-    message,
+    phone: telefone,
+    message: mensagem,,
   });
 }
 
