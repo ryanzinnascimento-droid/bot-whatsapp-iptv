@@ -8,11 +8,6 @@ const ZAPI_TOKEN = "B0FF5F1805A034784BFBB247";
 const ZAPI_CLIENT_TOKEN = "F2792570d921441dcb2d4e21a268dee75S";
 const ZAPI_URL = `https://api.z-api.io/instances/${ZAPI_INSTANCE}/token/${ZAPI_TOKEN}`;
 
-const HYPERBOX_URL = "https://hyperbox.sigma.st";
-const HYPERBOX_USER = "mago77";
-const HYPERBOX_PASS = "Mago77@77";
-const TESTE_HORAS = 2;
-
 const userState = {};
 
 async function sendText(phone, message) {
@@ -28,51 +23,89 @@ async function sendText(phone, message) {
   }
 }
 
-async function hyperboxLogin() {
-  const res = await axios.post(`${HYPERBOX_URL}/api/auth/login`, {
-    username: HYPERBOX_USER,
-    password: HYPERBOX_PASS,
-  });
-  return res.data.token || res.data.access_token;
-}
+const dispositivos = {
+  "1": {
+    nome: "📺 TV Samsung",
+    app: "PLAYSIM",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/BKADd2n1Ir"
+  },
+  "2": {
+    nome: "📺 TV LG / SEMP VIDAA",
+    app: "SMARTERS PLAYER PRO",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/kg5164DjiQ"
+  },
+  "3": {
+    nome: "📺 TV Samsung / Roku / LG (Blessed)",
+    app: "BLESSED",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/QywDmMRDpR"
+  },
+  "4": {
+    nome: "📦 TV Box / Fire Stick (Core Player)",
+    app: "CORE PLAYER",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/ZVdWXVjL3q"
+  },
+  "5": {
+    nome: "📦 TV Box / Fire Stick (HD Player)",
+    app: "HD PLAYER",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/7IoL7VM1XM"
+  },
+  "6": {
+    nome: "📱 iPhone / iOS",
+    app: "SMARTERS / VU PLAYER",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/XYgD9JWr6V"
+  },
+  "7": {
+    nome: "📱 Celular Android (Vizzion/Superplay)",
+    app: "VIZZION PLAY / SUPERPLAY",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/ayb1BQxWPR"
+  },
+  "8": {
+    nome: "📱 Celular Android (Happer)",
+    app: "HAPPER",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/kmVLlB7WQw"
+  },
+  "9": {
+    nome: "📱 Celular Android (XCIPTV)",
+    app: "XCIPTV",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/kg516V41jI"
+  },
+  "10": {
+    nome: "💻 Windows / PC",
+    app: "APLICATIVO WINDOWS",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/XKjLMPR104"
+  },
+  "11": {
+    nome: "📺 Samsung/Roku/LG (Assist+)",
+    app: "ASSIST+",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/Yen12r91PE"
+  },
+  "12": {
+    nome: "📱 Outros Apps (Usuário e Senha)",
+    app: "DEMAIS APPS",
+    url: "https://hyperbox.sigma.st/api/chatbot/YAWREq9Dji/80m1Eq91IE"
+  }
+};
 
-async function gerarTeste(nome, phone) {
-  const token = await hyperboxLogin();
-  const username = "teste_" + phone.replace(/\D/g, "").slice(-8);
-  const password = "T" + Math.random().toString(36).slice(-6).toUpperCase();
-  const expiracao = new Date();
-  expiracao.setHours(expiracao.getHours() + TESTE_HORAS);
-  await axios.post(`${HYPERBOX_URL}/api/clients`, {
-    username, password, name: nome,
-    expiration: expiracao.toISOString(),
-    max_connections: 1, is_trial: true,
-  }, { headers: { Authorization: `Bearer ${token}` } });
-  return { username, password };
-}
+const menuDispositivos = `📺 *Olá! Bem-vindo à Mago IPTV!* 🎬
 
-const menuPrincipal = `👋 Olá! Bem-vindo à *Mago IPTV* 🎬
+Sou o Paulo e estou aqui para te ajudar a ter o melhor entretenimento! 😊
 
-Escolha uma opção abaixo:
+Por favor, me informe o seu dispositivo:
 
-1️⃣ - Solicitar Teste Grátis (2h)
-2️⃣ - Ver Planos e Preços
-3️⃣ - Suporte
-4️⃣ - Falar com atendente
+1️⃣ - TV Samsung
+2️⃣ - TV LG / SEMP VIDAA
+3️⃣ - TV Samsung/Roku/LG (Blessed)
+4️⃣ - TV Box / Fire Stick (Core Player)
+5️⃣ - TV Box / Fire Stick (HD Player)
+6️⃣ - iPhone / iOS
+7️⃣ - Celular Android (Vizzion/Superplay)
+8️⃣ - Celular Android (Happer)
+9️⃣ - Celular Android (XCIPTV)
+🔟 - Windows / PC
+1️⃣1️⃣ - Samsung/Roku/LG (Assist+)
+1️⃣2️⃣ - Outros Apps
 
-_Digite o número da opção desejada._`;
-
-const menuPlanos = `💎 *Nossos Planos:*
-
-📦 *Mensal* - R$ 25,00
-📦 *Trimestral* - R$ 60,00
-📦 *Semestral* - R$ 100,00
-📦 *Anual* - R$ 180,00
-
-✅ Canais HD/FHD/4K
-✅ Filmes e Séries
-✅ Esportes ao vivo
-
-Para contratar, digite *4* para falar com um atendente!`;
+_Digite o número do seu dispositivo._`;
 
 app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
@@ -81,50 +114,37 @@ app.post("/webhook", async (req, res) => {
   const phone = body.phone;
   const text = (body.text?.message || "").trim();
   if (!phone || !text) return;
+
   const state = userState[phone] || { step: "menu" };
+
   try {
     if (state.step === "menu" || text === "0" || text.toLowerCase() === "menu") {
-      userState[phone] = { step: "aguardando_opcao" };
-      await sendText(phone, menuPrincipal);
-    } else if (state.step === "aguardando_opcao") {
-      if (text === "1") {
-        userState[phone] = { step: "aguardando_nome" };
-        await sendText(phone, "✍️ Ótimo! Para gerar seu teste, diga seu *nome completo*:");
-      } else if (text === "2") {
-        await sendText(phone, menuPlanos);
-      } else if (text === "3") {
-        await sendText(phone, "🛠️ *Suporte*\n\nDescreva seu problema e um atendente irá ajudá-lo em breve.\n\nDigite *0* para voltar ao menu.");
+      userState[phone] = { step: "aguardando_dispositivo" };
+      await sendText(phone, menuDispositivos);
+
+    } else if (state.step === "aguardando_dispositivo") {
+      const dispositivo = dispositivos[text];
+
+      if (dispositivo) {
+        userState[phone] = { step: "aguardando_dispositivo" };
+        await sendText(phone,
+          `✅ Ótima escolha! Para *${dispositivo.nome}* vamos instalar o *${dispositivo.app}*.\n\n` +
+          `👇 Clique no botão abaixo para *liberar seu teste grátis:*\n\n` +
+          `🔗 ${dispositivo.url}\n\n` +
+          `Após clicar, você receberá suas credenciais de acesso automaticamente! 🚀\n\n` +
+          `_Digite *0* para voltar ao menu ou *4* para falar com um atendente._`
+        );
       } else if (text === "4") {
-        userState[phone] = { step: "menu" };
         await sendText(phone, "👨‍💼 Aguarde, um atendente irá te chamar em breve!\n\nDigite *0* para voltar ao menu.");
       } else {
-        await sendText(phone, "❌ Opção inválida.\n\n" + menuPrincipal);
+        await sendText(phone, "❌ Opção inválida. Por favor escolha um número de 1 a 12.\n\n" + menuDispositivos);
       }
-    } else if (state.step === "aguardando_nome") {
-      const nome = text;
-      userState[phone] = { step: "gerando_teste" };
-      await sendText(phone, "⏳ Gerando seu teste, aguarde um momento...");
-      try {
-        const { username, password } = await gerarTeste(nome, phone);
-        await sendText(phone,
-          `✅ *Teste gerado com sucesso!*\n\n` +
-          `👤 *Usuário:* ${username}\n` +
-          `🔑 *Senha:* ${password}\n` +
-          `⏱️ *Validade:* ${TESTE_HORAS} horas\n` +
-          `🔗 *Portal:* http://hyperbox.sigma.st\n\n` +
-          `📱 Instale o *TiviMate* ou *IPTV Smarters* e use as credenciais acima.\n\n` +
-          `Gostou? Digite *2* para ver nossos planos ou *4* para falar com um atendente!`
-        );
-        userState[phone] = { step: "aguardando_opcao" };
-      } catch (err) {
-        console.error("Erro ao gerar teste:", err.message);
-        await sendText(phone, "❌ Erro ao gerar o teste. Tente novamente ou digite *4* para falar com um atendente.");
-        userState[phone] = { step: "aguardando_opcao" };
-      }
+
     } else {
-      userState[phone] = { step: "aguardando_opcao" };
-      await sendText(phone, menuPrincipal);
+      userState[phone] = { step: "aguardando_dispositivo" };
+      await sendText(phone, menuDispositivos);
     }
+
   } catch (err) {
     console.error("Erro geral:", err.message);
   }
