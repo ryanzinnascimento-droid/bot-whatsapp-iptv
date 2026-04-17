@@ -17,7 +17,7 @@ const TESTE_HORAS = 2;
 const userState = {};
 
 // ─── FUNÇÃO: Enviar mensagem de texto ─────────────────────────
-async function sendText(phone, message) {
+async function sendText(telefone, messagem) {
   await axios.post(`${ZAPI_URL}/send-text`, {
     phone,
     message,
