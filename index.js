@@ -5,6 +5,7 @@ app.use(express.json());
 
 const ZAPI_INSTANCE = "3F1CADC0A881C1ED5919AAE399BC1248";
 const ZAPI_TOKEN = "B0FF5F1805A034784BFBB247";
+const ZAPI_CLIENT_TOKEN = "F2792570d921441dcb2d4e21a268dee75S";
 const ZAPI_URL = `https://api.z-api.io/instances/${ZAPI_INSTANCE}/token/${ZAPI_TOKEN}`;
 
 const HYPERBOX_URL = "https://hyperbox.sigma.st";
@@ -20,7 +21,7 @@ async function sendText(phone, message) {
       phone: phone,
       message: message,
     }, {
-      headers: { "Client-Token": ZAPI_TOKEN }
+      headers: { "Client-Token": ZAPI_CLIENT_TOKEN }
     });
   } catch (err) {
     console.error("Erro ao enviar mensagem:", err.message, err.response?.data);
@@ -49,4 +50,87 @@ async function gerarTeste(nome, phone) {
   return { username, password };
 }
 
-const menuPrincipal = `
+const menuPrincipal = `👋 Olá! Bem-vindo à *Mago IPTV* 🎬
+
+Escolha uma opção abaixo:
+
+1️⃣ - Solicitar Teste Grátis (2h)
+2️⃣ - Ver Planos e Preços
+3️⃣ - Suporte
+4️⃣ - Falar com atendente
+
+_Digite o número da opção desejada._`;
+
+const menuPlanos = `💎 *Nossos Planos:*
+
+📦 *Mensal* - R$ 25,00
+📦 *Trimestral* - R$ 60,00
+📦 *Semestral* - R$ 100,00
+📦 *Anual* - R$ 180,00
+
+✅ Canais HD/FHD/4K
+✅ Filmes e Séries
+✅ Esportes ao vivo
+
+Para contratar, digite *4* para falar com um atendente!`;
+
+app.post("/webhook", async (req, res) => {
+  res.sendStatus(200);
+  const body = req.body;
+  if (body.fromMe) return;
+  const phone = body.phone;
+  const text = (body.text?.message || "").trim();
+  if (!phone || !text) return;
+  const state = userState[phone] || { step: "menu" };
+  try {
+    if (state.step === "menu" || text === "0" || text.toLowerCase() === "menu") {
+      userState[phone] = { step: "aguardando_opcao" };
+      await sendText(phone, menuPrincipal);
+    } else if (state.step === "aguardando_opcao") {
+      if (text === "1") {
+        userState[phone] = { step: "aguardando_nome" };
+        await sendText(phone, "✍️ Ótimo! Para gerar seu teste, diga seu *nome completo*:");
+      } else if (text === "2") {
+        await sendText(phone, menuPlanos);
+      } else if (text === "3") {
+        await sendText(phone, "🛠️ *Suporte*\n\nDescreva seu problema e um atendente irá ajudá-lo em breve.\n\nDigite *0* para voltar ao menu.");
+      } else if (text === "4") {
+        userState[phone] = { step: "menu" };
+        await sendText(phone, "👨‍💼 Aguarde, um atendente irá te chamar em breve!\n\nDigite *0* para voltar ao menu.");
+      } else {
+        await sendText(phone, "❌ Opção inválida.\n\n" + menuPrincipal);
+      }
+    } else if (state.step === "aguardando_nome") {
+      const nome = text;
+      userState[phone] = { step: "gerando_teste" };
+      await sendText(phone, "⏳ Gerando seu teste, aguarde um momento...");
+      try {
+        const { username, password } = await gerarTeste(nome, phone);
+        await sendText(phone,
+          `✅ *Teste gerado com sucesso!*\n\n` +
+          `👤 *Usuário:* ${username}\n` +
+          `🔑 *Senha:* ${password}\n` +
+          `⏱️ *Validade:* ${TESTE_HORAS} horas\n` +
+          `🔗 *Portal:* http://hyperbox.sigma.st\n\n` +
+          `📱 Instale o *TiviMate* ou *IPTV Smarters* e use as credenciais acima.\n\n` +
+          `Gostou? Digite *2* para ver nossos planos ou *4* para falar com um atendente!`
+        );
+        userState[phone] = { step: "aguardando_opcao" };
+      } catch (err) {
+        console.error("Erro ao gerar teste:", err.message);
+        await sendText(phone, "❌ Erro ao gerar o teste. Tente novamente ou digite *4* para falar com um atendente.");
+        userState[phone] = { step: "aguardando_opcao" };
+      }
+    } else {
+      userState[phone] = { step: "aguardando_opcao" };
+      await sendText(phone, menuPrincipal);
+    }
+  } catch (err) {
+    console.error("Erro geral:", err.message);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`✅ Bot rodando na porta ${PORT}`);
+});
