@@ -24,7 +24,7 @@ async function sendText(phone, message) {
       message: message,
     });
   } catch (err) {
-    console.error("Erro ao enviar mensagem:", err.message);
+    console.error("Erro ao enviar mensagem:", err.message, err.response?.data);
   }
 }
 
