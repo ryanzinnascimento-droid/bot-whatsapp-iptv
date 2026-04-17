@@ -20,7 +20,7 @@ const userState = {};
 async function sendText(telefone, messagem) {
   await axios.post(`${ZAPI_URL}/send-text`, {
     phone: telefone,
-    message: mensagem,,
+    message: mensagem,
   });
 }
 
