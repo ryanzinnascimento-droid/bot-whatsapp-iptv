@@ -96,9 +96,9 @@ app.post("/webhook", async (req, res) => {
   if (body.fromMe) return;
 
   const phone = body.phone;
-  const text = (body.text?.message || "").trim();
+  const telefone = corpo.phone || corpo.telefone;
 
-  if (!phone || !text) return;
+  const texto = (corpo.text?.message || corpo.texto?.mensagem || "").trim();
 
   const state = userState[phone] || { step: "menu" };
 
