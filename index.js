@@ -214,7 +214,7 @@ async function enviarMenuMarcaTV(phone) {
 app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
   const body = req.body;
-
+console.log("📦 BODY COMPLETO:", JSON.stringify(body));
   if (body.fromMe) return;
 
   const phone = body.phone;
