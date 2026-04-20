@@ -93,4 +93,169 @@ function getInstrucoes(dispositivo, marca) {
     "FIRE STICK": `🔥 *Passo a passo Fire Stick:*\n1. Instale o app *Downloader* na Fire Stick\n2. Baixe o *IPTV Smarters Pro* via APK\n3. Configure com as credenciais acima\n4. Aproveite! 🎬`,
   };
 
-  return instrucoes[dispositivo] || `📺 Use as credenci
+  return instrucoes[dispositivo] || `📺 Use as credenciais acima no seu app de IPTV preferido!\n\nPortal: ${HYPERBOX_URL}`;
+}
+
+// ─── MENU: Aparelhos ──────────────────────────────────────────
+async function enviarMenuAparelhos(phone) {
+  await sendList(
+    phone,
+    "📱 Selecione seu aparelho:",
+    "Para começar, me informe em qual aparelho deseja instalar:",
+    "VER APARELHOS 📋",
+    [{
+      title: "Escolha seu dispositivo",
+      rows: [
+        { id: "dev_tvbox",     title: "📦 TV BOX",          description: "Box Android TV" },
+        { id: "dev_android",   title: "📱 Celular Android",  description: "Smartphone Android" },
+        { id: "dev_iphone",    title: "🍎 Celular iPhone",   description: "iPhone ou iPad (iOS)" },
+        { id: "dev_smarttv",   title: "📺 Smart TV",         description: "Samsung, LG e outras" },
+        { id: "dev_pc",        title: "🖥️ PC ou Notebook",   description: "Windows ou Mac" },
+        { id: "dev_roku",      title: "📡 Roku",             description: "Dispositivo Roku" },
+        { id: "dev_firestick", title: "🔥 Fire Stick",       description: "Amazon Fire Stick" },
+      ],
+    }]
+  );
+}
+
+// ─── MENU: Marca da TV ────────────────────────────────────────
+async function enviarMenuMarcaTV(phone) {
+  await sendList(
+    phone,
+    "📺 Qual a marca da sua TV?",
+    "Selecione a marca para receber o passo a passo correto:",
+    "VER MARCAS 📋",
+    [{
+      title: "Marca da TV",
+      rows: [
+        { id: "marca_samsung", title: "Samsung",       description: "Smart TV Samsung" },
+        { id: "marca_lg",      title: "LG",            description: "Smart TV LG" },
+        { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL, Roku TV..." },
+      ],
+    }]
+  );
+}
+
+// ─── WEBHOOK PRINCIPAL ────────────────────────────────────────
+app.post("/webhook", async (req, res) => {
+  res.sendStatus(200);
+
+  const body = req.body;
+  if (body.fromMe) return;
+
+  const phone = body.phone;
+
+  const text = (
+    body.text?.message ||
+    body.listResponseMessage?.singleSelectReply?.selectedRowId ||
+    body.buttonsResponseMessage?.selectedButtonId ||
+    ""
+  ).trim().toLowerCase();
+
+  if (!phone || !text) return;
+
+  const state = userState[phone] || { step: "inicio" };
+
+  try {
+    if (
+      state.step === "inicio" ||
+      ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "menu", "start", "começar", "comecar", "0"].includes(text)
+    ) {
+      userState[phone] = { step: "aguardando_aparelho" };
+
+      await sendText(phone,
+        `Olá, bom dia! 👋\n\n` +
+        `Me chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\n` +
+        `Seja bem-vindo(a) à *Mago TV* 🚀\n\n` +
+        `🎁 Faça seu teste grátis agora mesmo!\n` +
+        `Para começar, me informe em qual aparelho deseja instalar:`
+      );
+
+      await enviarMenuAparelhos(phone);
+
+    } else if (state.step === "aguardando_aparelho" && text.startsWith("dev_")) {
+      const devMap = {
+        "dev_tvbox":     "TV BOX",
+        "dev_android":   "CELULAR ANDROID",
+        "dev_iphone":    "CELULAR IPHONE",
+        "dev_smarttv":   "SMART TV",
+        "dev_pc":        "PC OU NOTEBOOK",
+        "dev_roku":      "ROKU",
+        "dev_firestick": "FIRE STICK",
+      };
+
+      const dispositivo = devMap[text];
+
+      if (dispositivo === "SMART TV") {
+        userState[phone] = { step: "aguardando_marca", dispositivo };
+        await enviarMenuMarcaTV(phone);
+      } else if (dispositivo) {
+        userState[phone] = { step: "aguardando_nome", dispositivo, marca: null };
+        await sendText(phone, `✅ Ótimo! *${dispositivo}* selecionado!\n\nAgora me diga seu *nome completo* para gerar o teste:`);
+      } else {
+        await enviarMenuAparelhos(phone);
+      }
+
+    } else if (state.step === "aguardando_marca" && text.startsWith("marca_")) {
+      const marcaMap = {
+        "marca_samsung": "SAMSUNG",
+        "marca_lg":      "LG",
+        "marca_outras":  "OUTRAS",
+      };
+
+      const marca = marcaMap[text];
+      if (marca) {
+        userState[phone] = { step: "aguardando_nome", dispositivo: state.dispositivo, marca };
+        await sendText(phone, `✅ *Smart TV ${marca}* selecionada!\n\nAgora me diga seu *nome completo* para gerar o teste:`);
+      } else {
+        await enviarMenuMarcaTV(phone);
+      }
+
+    } else if (state.step === "aguardando_nome") {
+      const nome = text;
+      const { dispositivo, marca } = state;
+      userState[phone] = { step: "inicio" };
+
+      await sendText(phone, "⏳ Gerando seu teste, aguarde um momento...");
+
+      try {
+        const { username, password } = await gerarTeste(nome, phone);
+        const instrucoes = getInstrucoes(dispositivo, marca);
+
+        await sendText(phone,
+          `✅ *Teste gerado com sucesso!*\n\n` +
+          `👤 *Usuário:* ${username}\n` +
+          `🔑 *Senha:* ${password}\n` +
+          `⏱️ *Validade:* ${TESTE_HORAS} horas\n` +
+          `🔗 *Portal:* ${HYPERBOX_URL}\n\n` +
+          `━━━━━━━━━━━━━━━━━\n\n` +
+          instrucoes +
+          `\n\n━━━━━━━━━━━━━━━━━\n\n` +
+          `Gostou do teste? Entre em contato para assinar um plano! 😊\n` +
+          `Digite *oi* para voltar ao menu.`
+        );
+      } catch (err) {
+        console.error("Erro ao gerar teste:", err.message);
+        await sendText(phone, "❌ Erro ao gerar o teste. Por favor, tente novamente ou aguarde um atendente.");
+        userState[phone] = { step: "inicio" };
+      }
+
+    } else {
+      userState[phone] = { step: "inicio" };
+      await sendText(phone,
+        `Olá, bom dia! 👋\n\n` +
+        `Me chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\n` +
+        `Seja bem-vindo(a) à *Mago TV* 🚀\n\n` +
+        `🎁 Faça seu teste grátis agora mesmo!\n` +
+        `Para começar, me informe em qual aparelho deseja instalar:`
+      );
+      await enviarMenuAparelhos(phone);
+    }
+
+  } catch (err) {
+    console.error("Erro geral:", err.message);
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Bot Mago TV rodando na porta ${PORT}`));
