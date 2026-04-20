@@ -6,7 +6,6 @@ app.use(express.json());
 // ─── CONFIGURAÇÕES ───────────────────────────────────────────
 const ZAPI_INSTANCE = "3F1CADC0A881C1ED5919AAE399BC1248";
 const ZAPI_TOKEN = "B0FF5F1805A034784BFBB247";
-const ZAPI_CLIENT_TOKEN = "Fedf2f37cd5ce45b3a89373f76a97ac36S";
 const ZAPI_URL = `https://api.z-api.io/instances/${ZAPI_INSTANCE}/token/${ZAPI_TOKEN}`;
 
 const HYPERBOX_URL = "https://hyperbox.sigma.st";
@@ -19,23 +18,18 @@ const userState = {};
 
 // ─── FUNÇÕES Z-API ────────────────────────────────────────────
 async function sendText(phone, message) {
-  await axios.post(`${ZAPI_URL}/send-text`, {
-    phone,
-    message
-  }, {
-    headers: { "Client-Token": ZAPI_CLIENT_TOKEN }
-  });
+  await axios.post(`${ZAPI_URL}/send-text`, { phone, message });
 }
 
-async function sendList(phone, title, body, buttonLabel, sections) {
-  await axios.post(`${ZAPI_URL}/send-list-message`, {
+async function sendOptionList(phone, message, title, buttonLabel, options) {
+  await axios.post(`${ZAPI_URL}/send-option-list`, {
     phone,
-    message: body,
-    title,
-    buttonLabel,
-    sections,
-  }, {
-    headers: { "Client-Token": ZAPI_CLIENT_TOKEN }
+    message,
+    optionList: {
+      title,
+      buttonLabel,
+      options, // [{ id, title, description }]
+    },
   });
 }
 
@@ -83,56 +77,47 @@ function getInstrucoes(dispositivo, marca) {
       return `📺 *Passo a passo Smart TV:*\n1. Busque na sua loja de apps por *IPTV Smarters* ou *SS IPTV*\n2. Instale, abra e adicione as credenciais acima\n3. Aproveite! 🎬`;
     }
   }
-
   const instrucoes = {
-    "TV BOX": `📦 *Passo a passo TV BOX:*\n1. Baixe o app *Tivimate* ou *IPTV Smarters Pro* na Play Store\n2. Abra o app e selecione "Adicionar conta"\n3. Insira as credenciais acima\n4. Aproveite! 🎬`,
-    "CELULAR ANDROID": `📱 *Passo a passo Android:*\n1. Baixe o app *IPTV Smarters Pro* na Play Store\n2. Abra e toque em "Adicionar usuário"\n3. Preencha com as credenciais acima\n4. Aproveite! 🎬`,
+    "TV BOX":         `📦 *Passo a passo TV BOX:*\n1. Baixe o app *Tivimate* ou *IPTV Smarters Pro* na Play Store\n2. Abra o app e selecione "Adicionar conta"\n3. Insira as credenciais acima\n4. Aproveite! 🎬`,
+    "CELULAR ANDROID":`📱 *Passo a passo Android:*\n1. Baixe o app *IPTV Smarters Pro* na Play Store\n2. Abra e toque em "Adicionar usuário"\n3. Preencha com as credenciais acima\n4. Aproveite! 🎬`,
     "CELULAR IPHONE": `🍎 *Passo a passo iPhone:*\n1. Baixe o app *GSE Smart IPTV* na App Store\n2. Vá em "Remote Playlists" → "Add M3U URL"\n3. Use as credenciais no portal para gerar a URL M3U\n4. Aproveite! 🎬`,
     "PC OU NOTEBOOK": `🖥️ *Passo a passo PC/Notebook:*\n1. Baixe o *VLC Media Player* (gratuito)\n2. Abra o VLC → Mídia → Abrir fluxo de rede\n3. Cole a URL M3U gerada no portal\n4. Aproveite! 🎬`,
-    "ROKU": `📡 *Passo a passo Roku:*\n1. No Roku Channel Store, busque *IPTV Smarters*\n2. Instale e configure com as credenciais acima\n3. Aproveite! 🎬`,
-    "FIRE STICK": `🔥 *Passo a passo Fire Stick:*\n1. Instale o app *Downloader* na Fire Stick\n2. Baixe o *IPTV Smarters Pro* via APK\n3. Configure com as credenciais acima\n4. Aproveite! 🎬`,
+    "ROKU":           `📡 *Passo a passo Roku:*\n1. No Roku Channel Store, busque *IPTV Smarters*\n2. Instale e configure com as credenciais acima\n3. Aproveite! 🎬`,
+    "FIRE STICK":     `🔥 *Passo a passo Fire Stick:*\n1. Instale o app *Downloader* na Fire Stick\n2. Baixe o *IPTV Smarters Pro* via APK\n3. Configure com as credenciais acima\n4. Aproveite! 🎬`,
   };
-
   return instrucoes[dispositivo] || `📺 Use as credenciais acima no seu app de IPTV preferido!\n\nPortal: ${HYPERBOX_URL}`;
 }
 
-// ─── MENU: Aparelhos ──────────────────────────────────────────
+// ─── MENUS ────────────────────────────────────────────────────
 async function enviarMenuAparelhos(phone) {
-  await sendList(
+  await sendOptionList(
     phone,
-    "📱 Selecione seu aparelho:",
     "Para começar, me informe em qual aparelho deseja instalar:",
+    "SELECIONE SEU DISPOSITIVO 📱",
     "VER APARELHOS 📋",
-    [{
-      title: "Escolha seu dispositivo",
-      rows: [
-        { id: "dev_tvbox",     title: "📦 TV BOX",          description: "Box Android TV" },
-        { id: "dev_android",   title: "📱 Celular Android",  description: "Smartphone Android" },
-        { id: "dev_iphone",    title: "🍎 Celular iPhone",   description: "iPhone ou iPad (iOS)" },
-        { id: "dev_smarttv",   title: "📺 Smart TV",         description: "Samsung, LG e outras" },
-        { id: "dev_pc",        title: "🖥️ PC ou Notebook",   description: "Windows ou Mac" },
-        { id: "dev_roku",      title: "📡 Roku",             description: "Dispositivo Roku" },
-        { id: "dev_firestick", title: "🔥 Fire Stick",       description: "Amazon Fire Stick" },
-      ],
-    }]
+    [
+      { id: "dev_tvbox",     title: "📦 TV BOX",          description: "Box Android TV" },
+      { id: "dev_android",   title: "📱 Celular Android",  description: "Smartphone Android" },
+      { id: "dev_iphone",    title: "🍎 Celular iPhone",   description: "iPhone ou iPad (iOS)" },
+      { id: "dev_smarttv",   title: "📺 Smart TV",         description: "Samsung, LG e outras" },
+      { id: "dev_pc",        title: "🖥️ PC ou Notebook",   description: "Windows ou Mac" },
+      { id: "dev_roku",      title: "📡 Roku",             description: "Dispositivo Roku" },
+      { id: "dev_firestick", title: "🔥 Fire Stick",       description: "Amazon Fire Stick" },
+    ]
   );
 }
 
-// ─── MENU: Marca da TV ────────────────────────────────────────
 async function enviarMenuMarcaTV(phone) {
-  await sendList(
+  await sendOptionList(
     phone,
-    "📺 Qual a marca da sua TV?",
     "Selecione a marca para receber o passo a passo correto:",
+    "QUAL A MARCA DA SUA TV? 📺",
     "VER MARCAS 📋",
-    [{
-      title: "Marca da TV",
-      rows: [
-        { id: "marca_samsung", title: "Samsung",       description: "Smart TV Samsung" },
-        { id: "marca_lg",      title: "LG",            description: "Smart TV LG" },
-        { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL, Roku TV..." },
-      ],
-    }]
+    [
+      { id: "marca_samsung", title: "Samsung",       description: "Smart TV Samsung" },
+      { id: "marca_lg",      title: "LG",            description: "Smart TV LG" },
+      { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL, Roku TV..." },
+    ]
   );
 }
 
@@ -145,9 +130,11 @@ app.post("/webhook", async (req, res) => {
 
   const phone = body.phone;
 
+  // Captura texto de mensagem normal ou seleção de lista (optionList)
   const text = (
     body.text?.message ||
     body.listResponseMessage?.singleSelectReply?.selectedRowId ||
+    body.optionListResponseMessage?.selectedOptionId ||
     body.buttonsResponseMessage?.selectedButtonId ||
     ""
   ).trim().toLowerCase();
@@ -157,9 +144,11 @@ app.post("/webhook", async (req, res) => {
   const state = userState[phone] || { step: "inicio" };
 
   try {
+
+    // ── QUALQUER mensagem inicial → boas-vindas + menu ────────
     if (
       state.step === "inicio" ||
-      ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "menu", "start", "começar", "comecar", "0"].includes(text)
+      ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "menu", "start", "0"].includes(text)
     ) {
       userState[phone] = { step: "aguardando_aparelho" };
 
@@ -173,6 +162,7 @@ app.post("/webhook", async (req, res) => {
 
       await enviarMenuAparelhos(phone);
 
+    // ── Seleção de aparelho ───────────────────────────────────
     } else if (state.step === "aguardando_aparelho" && text.startsWith("dev_")) {
       const devMap = {
         "dev_tvbox":     "TV BOX",
@@ -196,6 +186,7 @@ app.post("/webhook", async (req, res) => {
         await enviarMenuAparelhos(phone);
       }
 
+    // ── Seleção de marca TV ───────────────────────────────────
     } else if (state.step === "aguardando_marca" && text.startsWith("marca_")) {
       const marcaMap = {
         "marca_samsung": "SAMSUNG",
@@ -211,6 +202,7 @@ app.post("/webhook", async (req, res) => {
         await enviarMenuMarcaTV(phone);
       }
 
+    // ── Recebe nome e gera o teste ────────────────────────────
     } else if (state.step === "aguardando_nome") {
       const nome = text;
       const { dispositivo, marca } = state;
@@ -236,12 +228,13 @@ app.post("/webhook", async (req, res) => {
         );
       } catch (err) {
         console.error("Erro ao gerar teste:", err.message);
-        await sendText(phone, "❌ Erro ao gerar o teste. Por favor, tente novamente ou aguarde um atendente.");
+        await sendText(phone, "❌ Erro ao gerar o teste. Por favor, tente novamente digitando *oi*.");
         userState[phone] = { step: "inicio" };
       }
 
+    // ── Mensagem não reconhecida → reinicia ───────────────────
     } else {
-      userState[phone] = { step: "inicio" };
+      userState[phone] = { step: "aguardando_aparelho" };
       await sendText(phone,
         `Olá, bom dia! 👋\n\n` +
         `Me chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\n` +
