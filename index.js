@@ -44,8 +44,14 @@ async function lista(phone, message, title, buttonLabel, options) {
 }
 
 async function login() {
-  const r = await axios.post(`${HYPERBOX_URL}/api/auth/login`, { username: HYPERBOX_USER, password: HYPERBOX_PASS });
-  return r.data.token || r.data.access_token;
+  try {
+    const r = await axios.post(`${HYPERBOX_URL}/api/auth/login`, { username: HYPERBOX_USER, password: HYPERBOX_PASS });
+    console.log("HyperBox login:", JSON.stringify(r.data));
+    return r.data.token || r.data.access_token || r.data.data?.token;
+  } catch (err) {
+    console.error("Erro login HyperBox:", err.response?.status, JSON.stringify(err.response?.data));
+    throw new Error("Falha login HyperBox");
+  }
 }
 
 async function gerarTeste(nome, phone) {
