@@ -6,6 +6,7 @@ app.use(express.json());
 // ─── CONFIGURAÇÕES ───────────────────────────────────────────
 const ZAPI_INSTANCE = "3F1CADC0A881C1ED5919AAE399BC1248";
 const ZAPI_TOKEN = "B0FF5F1805A034784BFBB247";
+const ZAPI_CLIENT_TOKEN = "Fe37f170edb7f48a295f2f126c0fcee90S";
 const ZAPI_URL = `https://api.z-api.io/instances/${ZAPI_INSTANCE}/token/${ZAPI_TOKEN}`;
 
 const HYPERBOX_URL = "https://hyperbox.sigma.st";
@@ -15,10 +16,16 @@ const TESTE_HORAS = 2;
 
 const userState = {};
 
+// ─── HEADERS Z-API ────────────────────────────────────────────
+const zapiHeaders = {
+  "Content-Type": "application/json",
+  "Client-Token": ZAPI_CLIENT_TOKEN,
+};
+
 // ─── FUNÇÕES Z-API ────────────────────────────────────────────
 async function sendText(phone, message) {
   try {
-    const res = await axios.post(`${ZAPI_URL}/send-text`, { phone, message });
+    const res = await axios.post(`${ZAPI_URL}/send-text`, { phone, message }, { headers: zapiHeaders });
     console.log("✅ sendText OK:", res.status);
   } catch (err) {
     console.error("❌ sendText ERRO:", err.response?.status, JSON.stringify(err.response?.data));
@@ -28,13 +35,9 @@ async function sendText(phone, message) {
 
 async function sendOptionList(phone, message, title, buttonLabel, options) {
   try {
-    const payload = {
-      phone,
-      message,
-      optionList: { title, buttonLabel, options },
-    };
+    const payload = { phone, message, optionList: { title, buttonLabel, options } };
     console.log("📤 sendOptionList payload:", JSON.stringify(payload));
-    const res = await axios.post(`${ZAPI_URL}/send-option-list`, payload);
+    const res = await axios.post(`${ZAPI_URL}/send-option-list`, payload, { headers: zapiHeaders });
     console.log("✅ sendOptionList OK:", res.status, JSON.stringify(res.data));
   } catch (err) {
     console.error("❌ sendOptionList ERRO:", err.response?.status, JSON.stringify(err.response?.data));
@@ -75,12 +78,12 @@ function getInstrucoes(dispositivo, marca) {
     return `📺 *Smart TV:*\n1. Busque *IPTV Smarters* na loja de apps\n2. Instale e adicione as credenciais`;
   }
   const map = {
-    "TV BOX":         `📦 *TV BOX:*\n1. Baixe *Tivimate* ou *IPTV Smarters Pro* na Play Store\n2. Adicione as credenciais acima`,
-    "CELULAR ANDROID":`📱 *Android:*\n1. Baixe *IPTV Smarters Pro* na Play Store\n2. Adicione as credenciais acima`,
-    "CELULAR IPHONE": `🍎 *iPhone:*\n1. Baixe *GSE Smart IPTV* na App Store\n2. Use as credenciais no portal para gerar a URL M3U`,
-    "PC OU NOTEBOOK": `🖥️ *PC/Notebook:*\n1. Baixe o *VLC Media Player*\n2. Mídia → Abrir fluxo de rede → cole a URL M3U`,
-    "ROKU":           `📡 *Roku:*\n1. Channel Store → busque *IPTV Smarters*\n2. Configure com as credenciais acima`,
-    "FIRE STICK":     `🔥 *Fire Stick:*\n1. Instale *Downloader*\n2. Baixe *IPTV Smarters Pro* via APK\n3. Configure com as credenciais`,
+    "TV BOX":          `📦 *TV BOX:*\n1. Baixe *Tivimate* ou *IPTV Smarters Pro* na Play Store\n2. Adicione as credenciais acima`,
+    "CELULAR ANDROID": `📱 *Android:*\n1. Baixe *IPTV Smarters Pro* na Play Store\n2. Adicione as credenciais acima`,
+    "CELULAR IPHONE":  `🍎 *iPhone:*\n1. Baixe *GSE Smart IPTV* na App Store\n2. Use as credenciais no portal para gerar a URL M3U`,
+    "PC OU NOTEBOOK":  `🖥️ *PC/Notebook:*\n1. Baixe o *VLC Media Player*\n2. Mídia → Abrir fluxo de rede → cole a URL M3U`,
+    "ROKU":            `📡 *Roku:*\n1. Channel Store → busque *IPTV Smarters*\n2. Configure com as credenciais acima`,
+    "FIRE STICK":      `🔥 *Fire Stick:*\n1. Instale *Downloader*\n2. Baixe *IPTV Smarters Pro* via APK\n3. Configure com as credenciais`,
   };
   return map[dispositivo] || `Use as credenciais no seu app de IPTV. Portal: ${HYPERBOX_URL}`;
 }
@@ -211,7 +214,7 @@ app.post("/webhook", async (req, res) => {
     }
 
   } catch (err) {
-    console.error("❌ Erro geral:", err.message, err.response?.data);
+    console.error("❌ Erro geral:", err.message, JSON.stringify(err.response?.data));
   }
 });
 
