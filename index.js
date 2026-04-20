@@ -131,16 +131,17 @@ app.post("/webhook", async (req, res) => {
     if (!phone) return;
 
     // Captura texto de qualquer formato
-    const text = (
-      body.text?.message ||
-      body.listResponseMessage?.singleSelectReply?.selectedRowId ||
-      body.optionListResponseMessage?.selectedOptionId ||
-      body.optionListResponseMessage?.title ||
-      body.buttonsResponseMessage?.selectedButtonId ||
-      body.buttonsResponseMessage?.selectedDisplayText ||
-      ""
-    ).trim().toLowerCase();
-
+  const text = (
+    body.text?.message ||
+    body.listResponseMessage?.singleSelectReply?.selectedRowId ||
+    body.listResponseMessage?.selectedRowId ||
+    body.listReplyMessage?.singleSelectReply?.selectedRowId ||
+    body.listReplyMessage?.selectedRowId ||
+    body?.message?.listResponseMessage?.singleSelectReply?.selectedRowId ||
+    body.buttonsResponseMessage?.selectedButtonId ||
+    body.responseList?.selectedRowId ||
+    ""
+  ).trim().toLowerCase();
     console.log(`📱 ${phone} | "${text}" | step: ${userState[phone]?.step || "inicio"}`);
     if (!text) return;
 
