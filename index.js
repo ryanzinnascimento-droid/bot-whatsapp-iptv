@@ -125,8 +125,8 @@ app.post("/webhook", async (req, res) => {
     const body = req.body;
     console.log("📦 BODY:", JSON.stringify(body).slice(0, 500));
 
-    if (body.fromMe) return;
-
+console.log("WEBHOOK RECEBIDO:", JSON.stringify(body, null, 2));
+if (body.fromMe) return;
     const phone = body.phone;
     if (!phone) return;
 
