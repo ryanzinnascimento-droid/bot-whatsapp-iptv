@@ -68,15 +68,51 @@ async function gerarTeste(nome, phone) {
 }
 
 const APPS = {
-  "TV BOX":          { img: "https://play-lh.googleusercontent.com/n4wrAVSNBMnQtoSEIuRSNqBJfbwFxU5OBpxSkFCJNMYT1jHLvpD1T0VbMZoREXAEgXM=w240-h480-rw", link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps", passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "CELULAR ANDROID":  { img: "https://play-lh.googleusercontent.com/n4wrAVSNBMnQtoSEIuRSNqBJfbwFxU5OBpxSkFCJNMYT1jHLvpD1T0VbMZoREXAEgXM=w240-h480-rw", link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps", passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "CELULAR IPHONE":   { img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/cb/d3/cf/cbd3cf0b-e87d-73c4-f504-35f39b4a6f93/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/230x0w.webp", link: "https://apps.apple.com/us/app/vu-iptv-player/id6526480705", passos: "1️⃣ Baixe o *VU IPTV Player* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "SMART TV SAMSUNG": { img: "https://ottpayer.es/img/logo.png", link: null, passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na Smart Hub\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "SMART TV LG":      { img: "https://ottpayer.es/img/logo.png", link: null, passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na LG Content Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "SMART TV OUTRAS":  { img: "https://ottpayer.es/img/logo.png", link: null, passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na loja de apps da sua TV\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "PC OU NOTEBOOK":   { img: "https://play-lh.googleusercontent.com/n4wrAVSNBMnQtoSEIuRSNqBJfbwFxU5OBpxSkFCJNMYT1jHLvpD1T0VbMZoREXAEgXM=w240-h480-rw", link: "https://www.microsoft.com/store/apps", passos: "1️⃣ Baixe o *Smarts Player* no link abaixo\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "FIRE STICK":       { img: "https://ottpayer.es/img/logo.png", link: null, passos: "1️⃣ Baixe o *Downloader* na Amazon Store (código: *382330*)\n2️⃣ Abra e baixe o XCIPTV pelo código *15633*\n3️⃣ Abra o XCIPTV e selecione *Xtream Codes*\n4️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
-  "ROKU":             { img: "https://ottpayer.es/img/logo.png", link: null, passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* no Roku Channel Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*" },
+  "TV BOX": {
+    img: "https://m.media-amazon.com/images/I/61QjUxDNMRL.png",
+    link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps",
+    passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "CELULAR ANDROID": {
+    img: "https://m.media-amazon.com/images/I/61QjUxDNMRL.png",
+    link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps",
+    passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "CELULAR IPHONE": {
+    img: "https://m.media-amazon.com/images/I/81VIPvLxCiL.png",
+    link: "https://apps.apple.com/br/app/iptvplayer-io-m3u-xtream/id6482853350",
+    passos: "1️⃣ Baixe o *IPTV Player.io* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "SMART TV SAMSUNG": {
+    img: "https://ottpayer.es/img/logo.png",
+    link: null,
+    passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na Smart Hub\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "SMART TV LG": {
+    img: "https://ottpayer.es/img/logo.png",
+    link: null,
+    passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na LG Content Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "SMART TV OUTRAS": {
+    img: "https://ottpayer.es/img/logo.png",
+    link: null,
+    passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na loja de apps da sua TV\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "PC OU NOTEBOOK": {
+    img: "https://m.media-amazon.com/images/I/71taq8SIMLL.png",
+    link: "https://iptv-smarters-pro.br.uptodown.com/windows/download",
+    passos: "1️⃣ Baixe o *IPTV Smarters Pro* no link abaixo\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "FIRE STICK": {
+    img: "https://m.media-amazon.com/images/I/61QjUxDNMRL.png",
+    link: null,
+    passos: "1️⃣ Baixe o *Downloader* na Amazon Store (código: *382330*)\n2️⃣ Baixe o XCIPTV pelo código *15633*\n3️⃣ Abra e selecione *Xtream Codes*\n4️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
+  "ROKU": {
+    img: "https://ottpayer.es/img/logo.png",
+    link: null,
+    passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* no Roku Channel Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+  },
 };
 
 async function enviarApp(phone, dispositivo) {
@@ -101,13 +137,13 @@ async function menuAparelhos(phone) {
     "SELECIONE SEU DISPOSITIVO 📱",
     "VER APARELHOS 📋",
     [
-      { id: "dev_tvbox",     title: "📦 TV BOX",          description: "Box Android TV" },
-      { id: "dev_android",   title: "📱 Celular Android",  description: "Smartphone Android" },
-      { id: "dev_iphone",    title: "🍎 Celular iPhone",   description: "iPhone ou iPad (iOS)" },
-      { id: "dev_smarttv",   title: "📺 Smart TV",         description: "Samsung, LG e outras" },
-      { id: "dev_pc",        title: "🖥️ PC ou Notebook",   description: "Windows ou Mac" },
-      { id: "dev_firestick", title: "🔥 Fire Stick",       description: "Amazon Fire Stick" },
-      { id: "dev_roku",      title: "📡 Roku",             description: "Dispositivo Roku" },
+      { id: "dev_tvbox",     title: "📦 TV BOX",         description: "Box Android TV" },
+      { id: "dev_android",   title: "📱 Celular Android", description: "Smartphone Android" },
+      { id: "dev_iphone",    title: "🍎 Celular iPhone",  description: "iPhone ou iPad (iOS)" },
+      { id: "dev_smarttv",   title: "📺 Smart TV",        description: "Samsung, LG e outras" },
+      { id: "dev_pc",        title: "🖥️ PC ou Notebook",  description: "Windows ou Mac" },
+      { id: "dev_firestick", title: "🔥 Fire Stick",      description: "Amazon Fire Stick" },
+      { id: "dev_roku",      title: "📡 Roku",            description: "Dispositivo Roku" },
     ]
   );
 }
@@ -118,9 +154,9 @@ async function menuMarcaTV(phone) {
     "MARCA DA TV 📺",
     "VER MARCAS 📋",
     [
-      { id: "marca_samsung", title: "Samsung",        description: "Smart TV Samsung" },
-      { id: "marca_lg",      title: "LG",             description: "Smart TV LG" },
-      { id: "marca_outras",  title: "Outras marcas",  description: "Sony, Philips, TCL..." },
+      { id: "marca_samsung", title: "Samsung",       description: "Smart TV Samsung" },
+      { id: "marca_lg",      title: "LG",            description: "Smart TV LG" },
+      { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL..." },
     ]
   );
 }
