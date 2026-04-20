@@ -69,7 +69,7 @@ async function gerarTeste(nome, phone) {
 
 const APPS = {
   "TV BOX": {
-    img: "https://m.media-amazon.com/images/I/61QjUxDNMRL.png",
+    img: "https://i.imgur.com/nJkmsxt.png",
     link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps",
     passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
