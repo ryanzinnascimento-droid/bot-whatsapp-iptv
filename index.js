@@ -84,7 +84,7 @@ const APPS = {
     passos: "1️⃣ Baixe o *Vu Player* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "SMART TV SAMSUNG": {
-    img: "https://ottpayer.es/img/logo.png",
+    img: "https://i.ibb.co/6csMZbgd/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na Smart Hub\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
