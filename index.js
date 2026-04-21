@@ -89,7 +89,7 @@ const APPS = {
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na Smart Hub\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "SMART TV LG": {
-    img: "https://ottpayer.es/img/logo.png",
+    img: "https://i.postimg.cc/cC92pmh5/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na LG Content Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
