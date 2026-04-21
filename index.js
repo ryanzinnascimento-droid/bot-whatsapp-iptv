@@ -79,7 +79,7 @@ const APPS = {
     passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "CELULAR IPHONE": {
-    img: "https://i.ibb.co/KkYgKZ8/Whats-App-Image-2026-04-20-at-20-17-18-1.jpg",
+    img: "https://i.ibb.co/7tnSLGBN/Whats-App-Image-2026-04-21-at-10-13-51.jpg",
     link: "https://apps.apple.com/br/app/iptvplayer-io-m3u-xtream/id6482853350",
     passos: "1️⃣ Baixe o *IPTV Player.io* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
