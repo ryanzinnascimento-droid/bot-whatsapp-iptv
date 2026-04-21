@@ -69,17 +69,17 @@ async function gerarTeste(nome, phone) {
 
 const APPS = {
   "TV BOX": {
-    img: "https://play-lh.googleusercontent.com/nJJKFBXBbFbJaBj4ZMwYRiZVtxI5gQNYpFOa9djifbQW8S2d3hb_a-HQf3bvakXWIQ",
+    img: "https://i.ibb.co/rSghdPX/Whats-App-Image-2026-04-20-at-20-17-18-1.jpg",
     link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps",
     passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "CELULAR ANDROID": {
-    img: "https://m.media-amazon.com/images/I/61QjUxDNMRL.png",
+    img: "https://i.ibb.co/rSghdPX/Whats-App-Image-2026-04-20-at-20-17-18-1.jpg",
     link: "https://play.google.com/store/search?q=cn+player+iptv&c=apps",
     passos: "1️⃣ Baixe o *CN Player* na Play Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "CELULAR IPHONE": {
-    img: "https://m.media-amazon.com/images/I/81VIPvLxCiL.png",
+    img: "https://i.ibb.co/KkYgKZ8/Whats-App-Image-2026-04-20-at-20-17-18-1.jpg",
     link: "https://apps.apple.com/br/app/iptvplayer-io-m3u-xtream/id6482853350",
     passos: "1️⃣ Baixe o *IPTV Player.io* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
