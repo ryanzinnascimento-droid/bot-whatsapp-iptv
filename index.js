@@ -81,7 +81,7 @@ const APPS = {
   "CELULAR IPHONE": {
     img: "https://i.ibb.co/7tnSLGBN/Whats-App-Image-2026-04-21-at-10-13-51.jpg",
     link: "https://apps.apple.com/br/app/iptvplayer-io-m3u-xtream/id6482853350",
-    passos: "1️⃣ Baixe o *IPTV Player.io* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+    passos: "1️⃣ Baixe o *Vu Player* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "SMART TV SAMSUNG": {
     img: "https://ottpayer.es/img/logo.png",
