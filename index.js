@@ -109,7 +109,7 @@ const APPS = {
     passos: "1️⃣ Baixe o *Downloader* na Amazon Store (código: *382330*)\n2️⃣ Baixe o XCIPTV pelo código *15633*\n3️⃣ Abra e selecione *Xtream Codes*\n4️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "ROKU": {
-    img: "https://ottplayer.es/img/logo.png",
+    img: "https://i.ibb.co/Y4D7qP6f/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* no Roku Channel Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   }
