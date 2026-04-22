@@ -216,21 +216,20 @@ app.post("/webhook", async (req, res) => {
       if (dispositivo === "SMART TV") {
         userState[phone] = { step: "aguardando_marca" };
         await menuMarcaTV(phone);
-      } else {
-        userState[phone] = { step: "aguardando_nome", dispositivo };
-        await txt(phone, `✅ *${dispositivo}* selecionado!\n\nMe diga seu *nome completo* para continuar:`);
+   } else {
+        userState[phone] = { step: "aguardando_liberar", dispositivo, nome: "" };
+        await enviarApp(phone, dispositivo);
       }
 
     } else if (state.step === "aguardando_marca" && MARCA_MAP[text]) {
       const dispositivo = MARCA_MAP[text];
-      userState[phone] = { step: "aguardando_nome", dispositivo };
-      await txt(phone, `✅ *${dispositivo}* selecionada!\n\nMe diga seu *nome completo* para continuar:`);
+      userState[phone] = { step: "aguardando_liberar", dispositivo, nome: "" };
+      await enviarApp(phone, dispositivo);
 
     } else if (state.step === "aguardando_nome") {
       const { dispositivo } = state;
       userState[phone] = { step: "aguardando_liberar", dispositivo, nome: text };
       await enviarApp(phone, dispositivo);
-
     } else if (state.step === "aguardando_liberar" && text === "liberar_teste") {
       const { dispositivo, nome } = state;
       userState[phone] = { step: "inicio" };
