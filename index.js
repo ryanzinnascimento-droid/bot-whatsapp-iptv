@@ -43,7 +43,7 @@ async function lista(phone, message, title, buttonLabel, options) {
   }
 }
 
-async function login() {
+async function const r = await axios.post(`${HYPERBOX_URL}/api/auth/login`, {    email: HYPERBOX_USER,    password: HYPERBOX_PASS  }); {
   try {
     const r = await axios.post(`${HYPERBOX_URL}/api/login`, { username: HYPERBOX_USER, password: HYPERBOX_PASS });
     console.log("HyperBox login:", JSON.stringify(r.data));
