@@ -96,7 +96,7 @@ const APPS = {
   "SMART TV OUTRAS": {
     img: null,
     link: null,
-    passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na loja de apps da sua TV\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+    passos: "Entre em contato com nosso suporte para receber o passo a passo para sua TV!\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "PC OU NOTEBOOK": {
     img: "https://m.media-amazon.com/images/I/71taq8SIMLL.png",
@@ -109,24 +109,24 @@ const APPS = {
     passos: "1️⃣ Baixe o *Downloader* na Amazon Store (código: *382330*)\n2️⃣ Baixe o XCIPTV pelo código *15633*\n3️⃣ Abra e selecione *Xtream Codes*\n4️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "ROKU": {
-    img: "https://ottpayer.es/img/logo.png",
+    img: "https://ottplayer.es/img/logo.png",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* no Roku Channel Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
-  },
+  }
 };
 
 async function enviarApp(phone, dispositivo) {
-  const app = APPS[dispositivo];
-  if (!app) { await txt(phone, "⚠️ Dispositivo não encontrado."); return; }
-  if (app.img) await img(phone, app.img, "");
-  await txt(phone, app.passos + (app.link ? `\n\n📥 *Baixar:* ${app.link}` : ""));
+  const appInfo = APPS[dispositivo];
+  if (!appInfo) { await txt(phone, "⚠️ Dispositivo não encontrado."); return; }
+  if (appInfo.img) await img(phone, appInfo.img, "");
+  await txt(phone, appInfo.passos + (appInfo.link ? `\n\n📥 *Baixar:* ${appInfo.link}` : ""));
   await lista(phone,
     "Conseguiu baixar o app e acessar a tela de usuário e senha?",
     "🚀 Etapa Final - Liberar Teste",
     "LIBERAR TESTE 🚀",
     [
       { id: "liberar_teste", title: "✅ Sim, LIBERAR TESTE 🚀", description: "Estou pronto!" },
-      { id: "preciso_ajuda", title: "❌ Preciso de Ajuda", description: "Não consegui instalar" },
+      { id: "preciso_ajuda", title: "❌ Preciso de Ajuda", description: "Não consegui instalar" }
     ]
   );
 }
@@ -143,7 +143,7 @@ async function menuAparelhos(phone) {
       { id: "dev_smarttv",   title: "📺 Smart TV",        description: "Samsung, LG e outras" },
       { id: "dev_pc",        title: "🖥️ PC ou Notebook",  description: "Windows ou Mac" },
       { id: "dev_firestick", title: "🔥 Fire Stick",      description: "Amazon Fire Stick" },
-      { id: "dev_roku",      title: "📡 Roku",            description: "Dispositivo Roku" },
+      { id: "dev_roku",      title: "📡 Roku",            description: "Dispositivo Roku" }
     ]
   );
 }
@@ -156,7 +156,7 @@ async function menuMarcaTV(phone) {
     [
       { id: "marca_samsung", title: "Samsung",       description: "Smart TV Samsung" },
       { id: "marca_lg",      title: "LG",            description: "Smart TV LG" },
-      { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL..." },
+      { id: "marca_outras",  title: "Outras marcas", description: "Sony, Philips, TCL..." }
     ]
   );
 }
@@ -168,47 +168,48 @@ const DEV_MAP = {
   "dev_smarttv":   "SMART TV",
   "dev_pc":        "PC OU NOTEBOOK",
   "dev_firestick": "FIRE STICK",
-  "dev_roku":      "ROKU",
+  "dev_roku":      "ROKU"
 };
 
 const MARCA_MAP = {
   "marca_samsung": "SMART TV SAMSUNG",
   "marca_lg":      "SMART TV LG",
-  "marca_outras":  "SMART TV OUTRAS",
+  "marca_outras":  "SMART TV OUTRAS"
 };
 
 const SAUDACOES = ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "menu", "start", "0", "hello", "hi"];
 
+const BOAS_VINDAS = "Olá, bom dia! 👋\n\nMe chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\nSeja bem-vindo(a) à *Mago TV* 🚀\n\n🎁 Faça seu teste grátis agora mesmo!\nPara começar, me informe em qual aparelho deseja instalar:";
+
 app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
-  const body = req.body;
-  if (body.fromMe) return;
-
-  const phone = body.phone || body.telefone;
-  const text = (
-    body.text?.message ||
-    body.texto?.mensagem ||
-    body.listResponseMessage?.singleSelectReply?.selectedRowId ||
-    body.listResponseMessage?.selectedRowId ||
-    body.listReplyMessage?.singleSelectReply?.selectedRowId ||
-    body.listReplyMessage?.selectedRowId ||
-    body?.message?.listResponseMessage?.singleSelectReply?.selectedRowId ||
-    body.buttonsResponseMessage?.selectedButtonId ||
-    body.responseList?.selectedRowId ||
-    ""
-  ).trim().toLowerCase();
-
-  console.log(`📱 ${phone} | "${text}" | passo: ${userState[phone]?.step || "inicio"}`);
-  if (!phone || !text) return;
-
-  const state = userState[phone] || { step: "inicio" };
-
   try {
+    const body = req.body;
+    console.log("📦 BODY:", JSON.stringify(body).slice(0, 500));
+
+    if (body.fromMe) return;
+
+    const phone = body.phone || body.telefone;
+    const text = (
+      body.text?.message ||
+      body.listResponseMessage?.singleSelectReply?.selectedRowId ||
+      body.listResponseMessage?.selectedRowId ||
+      body.listReplyMessage?.singleSelectReply?.selectedRowId ||
+      body.listReplyMessage?.selectedRowId ||
+      body?.message?.listResponseMessage?.singleSelectReply?.selectedRowId ||
+      body.buttonsResponseMessage?.selectedButtonId ||
+      body.responseList?.selectedRowId ||
+      ""
+    ).trim().toLowerCase();
+
+    console.log(`📱 ${phone} | "${text}" | step: ${userState[phone]?.step || "inicio"}`);
+    if (!phone || !text) return;
+
+    const state = userState[phone] || { step: "inicio" };
+
     if (state.step === "inicio" || SAUDACOES.includes(text)) {
       userState[phone] = { step: "aguardando_aparelho" };
-      await txt(phone,
-        `Olá, bom dia! 👋\n\nMe chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\nSeja bem-vindo(a) à *Mago TV* 🚀\n\n🎁 Faça seu teste grátis agora mesmo!\nPara começar, me informe em qual aparelho deseja instalar:`
-      );
+      await txt(phone, BOAS_VINDAS);
       await menuAparelhos(phone);
 
     } else if (state.step === "aguardando_aparelho" && DEV_MAP[text]) {
@@ -216,7 +217,7 @@ app.post("/webhook", async (req, res) => {
       if (dispositivo === "SMART TV") {
         userState[phone] = { step: "aguardando_marca" };
         await menuMarcaTV(phone);
-   } else {
+      } else {
         userState[phone] = { step: "aguardando_liberar", dispositivo, nome: "" };
         await enviarApp(phone, dispositivo);
       }
@@ -226,16 +227,12 @@ app.post("/webhook", async (req, res) => {
       userState[phone] = { step: "aguardando_liberar", dispositivo, nome: "" };
       await enviarApp(phone, dispositivo);
 
-    } else if (state.step === "aguardando_nome") {
-      const { dispositivo } = state;
-      userState[phone] = { step: "aguardando_liberar", dispositivo, nome: text };
-      await enviarApp(phone, dispositivo);
     } else if (state.step === "aguardando_liberar" && text === "liberar_teste") {
       const { dispositivo, nome } = state;
       userState[phone] = { step: "inicio" };
       await txt(phone, "⏳ Gerando seu teste, aguarde...");
       try {
-        const { username, password } = await gerarTeste(nome, phone);
+        const { username, password } = await gerarTeste(nome || "Cliente", phone);
         await txt(phone,
           `✅ *Teste gerado com sucesso!*\n\n` +
           `👤 *Usuário:* ${username}\n` +
@@ -256,12 +253,12 @@ app.post("/webhook", async (req, res) => {
 
     } else {
       userState[phone] = { step: "inicio" };
-      await txt(phone, `Olá, bom dia! 👋\n\nMe chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\nSeja bem-vindo(a) à *Mago TV* 🚀\n\n🎁 Faça seu teste grátis agora mesmo!\nPara começar, me informe em qual aparelho deseja instalar:`);
+      await txt(phone, BOAS_VINDAS);
       await menuAparelhos(phone);
     }
 
   } catch (err) {
-    console.error("Erro geral:", err.message);
+    console.error("❌ Erro geral:", err.message);
   }
 });
 
