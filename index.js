@@ -67,6 +67,18 @@ async function gerarTeste(nome, phone) {
   return { username, password };
 }
 
+const APP_NOMES = {
+  "TV BOX":          "CN Player",
+  "CELULAR ANDROID": "CN Player",
+  "CELULAR IPHONE":  "VU Player",
+  "SMART TV SAMSUNG":"Play Sim / Assist Plus",
+  "SMART TV LG":     "Play Sim / Assist Plus",
+  "SMART TV OUTRAS": "Play Sim / Assist Plus",
+  "PC OU NOTEBOOK":  "IPTV Smarters Pro",
+  "FIRE STICK":      "XCIPTV",
+  "ROKU":            "Play Sim / Assist Plus",
+};
+
 const APPS = {
   "TV BOX": {
     img: "https://i.ibb.co/rSghdPX/Whats-App-Image-2026-04-20-at-20-17-18-1.jpg",
@@ -81,15 +93,15 @@ const APPS = {
   "CELULAR IPHONE": {
     img: "https://i.ibb.co/7tnSLGBN/Whats-App-Image-2026-04-21-at-10-13-51.jpg",
     link: "https://apps.apple.com/br/app/iptvplayer-io-m3u-xtream/id6482853350",
-    passos: "1️⃣ Baixe o *Vu Player* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
+    passos: "1️⃣ Baixe o *VU Player* na App Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "SMART TV SAMSUNG": {
-    img: "https://i.postimg.cc/cC92pmh5/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
+    img: "https://i.ibb.co/Y4D7qP6f/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na Smart Hub\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
   "SMART TV LG": {
-    img: "https://i.postimg.cc/cC92pmh5/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
+    img: "https://i.ibb.co/Y4D7qP6f/3008bfb6-36be-4ba5-b48d-e66c2c3748ab.jpg",
     link: null,
     passos: "1️⃣ Busque *Play Sim* ou *Assist Plus* na LG Content Store\n2️⃣ Abra e selecione *Xtream Codes*\n3️⃣ Insira suas credenciais\n\n🔴 Dificuldades? Digite *AJUDA*"
   },
@@ -178,7 +190,6 @@ const MARCA_MAP = {
 };
 
 const SAUDACOES = ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "menu", "start", "0", "hello", "hi"];
-
 const BOAS_VINDAS = "Olá, bom dia! 👋\n\nMe chamo Paulo e darei continuidade ao seu atendimento. 👨‍💻\nSeja bem-vindo(a) à *Mago TV* 🚀\n\n🎁 Faça seu teste grátis agora mesmo!\nPara começar, me informe em qual aparelho deseja instalar:";
 
 app.post("/webhook", async (req, res) => {
@@ -233,13 +244,19 @@ app.post("/webhook", async (req, res) => {
       await txt(phone, "⏳ Gerando seu teste, aguarde...");
       try {
         const { username, password } = await gerarTeste(nome || "Cliente", phone);
+        const appNome = APP_NOMES[dispositivo] || "seu app IPTV";
+
         await txt(phone,
-          `✅ *Teste gerado com sucesso!*\n\n` +
+          `✅ *Teste Liberado!* 🎉\n\n` +
+          `📱 Abra o *${appNome}*\n` +
+          `➡️ Selecione *Xtream Codes*\n\n` +
+          `🌐 *Host:* hyperbox.sigma.st\n` +
           `👤 *Usuário:* ${username}\n` +
           `🔑 *Senha:* ${password}\n` +
-          `⏱️ *Validade:* ${TESTE_HORAS} horas\n` +
-          `🔗 *Portal:* ${HYPERBOX_URL}\n\n` +
-          `Gostou? Entre em contato para assinar um plano! 😊\nDigite *oi* para voltar ao menu.`
+          `⏱️ *Validade:* ${TESTE_HORAS} horas\n\n` +
+          `Aproveite! 🎬\n\n` +
+          `Gostou? Entre em contato para assinar um plano! 😊\n` +
+          `Digite *oi* para voltar ao menu.`
         );
       } catch (err) {
         console.error("Erro gerarTeste:", err.message);
